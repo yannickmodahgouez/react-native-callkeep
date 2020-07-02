@@ -32,6 +32,7 @@ import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.WindowManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -420,14 +421,19 @@ public class RNCallKeepModule extends ReactContextBaseJavaModule {
     public void backToForeground() {
         Context context = getAppContext();
         String packageName = context.getApplicationContext().getPackageName();
-        Intent focusIntent = context.getPackageManager().getLaunchIntentForPackage(packageName).cloneFilter();
-        Activity activity = getCurrentActivity();
+        final Intent focusIntent = context.getPackageManager().getLaunchIntentForPackage(packageName).cloneFilter();
+        final Activity activity = getCurrentActivity();
         boolean isOpened = activity != null;
         Log.d(TAG, "backToForeground, app isOpened ?" + (isOpened ? "true" : "false"));
 
         if (isOpened) {
             focusIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-            activity.startActivity(focusIntent);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    activity.startActivity(focusIntent);
+                }
+            }, 100);
         } else {
 
             focusIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK +
