@@ -433,7 +433,7 @@ public class RNCallKeepModule extends ReactContextBaseJavaModule {
                 public void run() {
                     activity.startActivity(focusIntent);
                 }
-            }, 100);
+            }, 500);
         } else {
 
             focusIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK +
